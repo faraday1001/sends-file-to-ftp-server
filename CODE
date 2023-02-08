@@ -1,0 +1,23 @@
+import os
+import ftplib
+
+ftp_server = "sunucunun site adresini yaz"
+username = "isimini yaz "
+password = "sunucunun şifresini yaz"
+src_dir = "C:\almak istediğin dosyanın ismini yaz\"
+target_dir = "/(yükleneceği dosya ismini yaz)/dir"
+
+# FTP server'a bağlan
+ftp = ftplib.FTP(ftp_server)
+ftp.login(username, password)
+ftp.cwd(target_dir)
+
+# Dizinleri ve alt dizinleri taramak için os.walk() kullanın
+for dirpath, dirnames, filenames in os.walk(src_dir):
+    for file in filenames:
+        # dosyayı aç ve sunucuya yükle
+        with open(os.path.join(dirpath, file), 'rb') as f:
+            ftp.storbinary('STOR ' + file, f)
+
+ftp.quit()
+print(f'o7 görev başarılı {len(filenames)} dosyalar burdan {src_dir} buraya yüklendi o7 {ftp_server}:{target_dir}.')
